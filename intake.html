@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>∞ INFINITY — Player Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black:   #06060f;
+    --deep:    #0b0b1a;
+    --navy:    #0e1428;
+    --panel:   #111827;
+    --gold:    #c9a84c;
+    --gold-dim: #7a6228;
+    --gold-glow: #e8c97a;
+    --teal:    #1a8a7d;
+    --teal-light: #2ec4b0;
+    --white:   #f0ead8;
+    --gray:    #7a7a9a;
+    --muted:   #3a3a5a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── STAR FIELD ─────────────────────────── */
+  .stars {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(201,168,76,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 70%, rgba(26,138,125,0.04) 0%, transparent 60%);
+  }
+  .stars::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, rgba(240,234,216,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 45%, rgba(240,234,216,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 8%, rgba(240,234,216,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 60%, rgba(240,234,216,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 25%, rgba(240,234,216,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 50%, rgba(240,234,216,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 92% 12%, rgba(240,234,216,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 80%, rgba(240,234,216,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 85%, rgba(240,234,216,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 33% 70%, rgba(201,168,76,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 77% 88%, rgba(201,168,76,0.3) 0%, transparent 100%);
+  }
+
+  /* ── LAYOUT ─────────────────────────────── */
+  .wrapper {
+    position: relative; z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 28px 120px;
+  }
+
+  /* ── INTRO SCREEN ────────────────────────── */
+  #intro {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    padding: 80px 0 60px;
+    opacity: 0; animation: fadeUp 1.2s ease forwards 0.3s;
+  }
+
+  .sigil {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(72px, 12vw, 110px);
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 24px;
+    filter: drop-shadow(0 0 30px rgba(201,168,76,0.3));
+    animation: pulse 4s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(201,168,76,0.25)); }
+    50%       { filter: drop-shadow(0 0 45px rgba(201,168,76,0.5)); }
+  }
+
+  .game-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    letter-spacing: 0.18em;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 56px;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold) 0%, transparent 100%);
+    margin: 40px 0;
+    opacity: 0.4;
+  }
+
+  .intro-body {
+    font-size: 19px;
+    color: rgba(240,234,216,0.8);
+    max-width: 620px;
+    margin-bottom: 28px;
+    line-height: 1.9;
+  }
+
+  .intro-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--gray);
+    letter-spacing: 0.1em;
+    margin-bottom: 56px;
+  }
+
+  .begin-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    border: none;
+    padding: 18px 48px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .begin-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold-glow);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .begin-btn:hover::before { transform: scaleX(1); }
+  .begin-btn span { position: relative; z-index: 1; }
+
+  .begin-btn:hover {
+    box-shadow: 0 0 40px rgba(201,168,76,0.4);
+    transform: translateY(-2px);
+  }
+
+  /* ── FORM SECTION ────────────────────────── */
+  #form-section {
+    display: none;
+    opacity: 0;
+    padding-top: 60px;
+  }
+
+  #form-section.visible {
+    display: block;
+    animation: fadeUp 0.8s ease forwards;
+  }
+
+  /* ── PROGRESS BAR ────────────────────────── */
+  .progress-wrap {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(6,6,15,0.92);
+    backdrop-filter: blur(12px);
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+    margin-bottom: 60px;
+  }
+
+  .progress-inner {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .progress-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--gold-dim);
+    white-space: nowrap;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 2px;
+    background: var(--muted);
+    border-radius: 2px;
+    overflow: visible;
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal) 0%, var(--gold) 100%);
+    border-radius: 2px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+    box-shadow: 0 0 8px rgba(201,168,76,0.4);
+  }
+
+  .progress-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  /* ── QUESTION BLOCK ──────────────────────── */
+  .q-block {
+    margin-bottom: 72px;
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .q-block.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .q-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--teal-light);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .q-number::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--teal) 0%, transparent 100%);
+    opacity: 0.3;
+  }
+
+  .q-text {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(18px, 3vw, 22px);
+    color: var(--white);
+    line-height: 1.5;
+    margin-bottom: 10px;
+    font-weight: 400;
+  }
+
+  .q-hint {
+    font-family: 'EB Garamond', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--gray);
+    margin-bottom: 22px;
+    line-height: 1.6;
+  }
+
+  .q-name-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 540px) {
+    .q-name-row { grid-template-columns: 1fr; }
+  }
+
+  .field-wrap { display: flex; flex-direction: column; gap: 8px; }
+
+  .field-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea,
+  select {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--muted);
+    border-bottom: 2px solid var(--muted);
+    color: var(--white);
+    font-family: 'EB Garamond', serif;
+    font-size: 17px;
+    padding: 14px 16px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 0;
+    -webkit-appearance: none;
+    resize: none;
+  }
+
+  textarea {
+    min-height: 140px;
+    line-height: 1.7;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--gold);
+    border-bottom-color: var(--gold);
+    background: rgba(201,168,76,0.04);
+    box-shadow: 0 4px 20px rgba(201,168,76,0.08);
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: var(--muted);
+    font-style: italic;
+    font-size: 15px;
+  }
+
+  select option { background: var(--panel); color: var(--white); }
+
+  /* ── CHARACTER COUNT ──────────────────────── */
+  .char-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-align: right;
+    margin-top: 4px;
+    transition: color 0.3s;
+  }
+
+  .char-count.active { color: var(--teal-light); }
+
+  /* ── SECTION HEADER ──────────────────────── */
+  .section-header {
+    margin: 80px 0 48px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .section-header.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(22px, 4vw, 30px);
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .section-body {
+    font-size: 16px;
+    color: var(--gray);
+    font-style: italic;
+    line-height: 1.8;
+    max-width: 580px;
+  }
+
+  /* ── SUBMIT AREA ──────────────────────────── */
+  .submit-area {
+    margin-top: 80px;
+    padding-top: 48px;
+    border-top: 1px solid rgba(201,168,76,0.15);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .submit-area.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .submit-note {
+    font-size: 15px;
+    font-style: italic;
+    color: var(--gray);
+    margin-bottom: 32px;
+    line-height: 1.8;
+  }
+
+  .submit-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    border: none;
+    padding: 20px 64px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .submit-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold-glow);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .submit-btn:hover::before { transform: scaleX(1); }
+  .submit-btn span { position: relative; z-index: 1; }
+
+  .submit-btn:hover {
+    box-shadow: 0 0 50px rgba(201,168,76,0.4);
+    transform: translateY(-2px);
+  }
+
+  /* ── THANK YOU ────────────────────────────── */
+  #thankyou {
+    display: none;
+    min-height: 100vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 80px 0;
+    opacity: 0;
+  }
+
+  #thankyou.visible {
+    display: flex;
+    animation: fadeUp 1s ease forwards;
+  }
+
+  .ty-sigil {
+    font-family: 'Cinzel', serif;
+    font-size: 64px;
+    color: var(--gold);
+    margin-bottom: 24px;
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  .ty-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(24px, 4vw, 36px);
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  .ty-body {
+    font-size: 18px;
+    color: rgba(240,234,216,0.75);
+    max-width: 560px;
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+
+  .ty-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--teal-light);
+    margin-top: 32px;
+  }
+
+  /* ── ANIMATIONS ──────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SCROLLBAR ───────────────────────────── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+  /* ── VALIDATION ──────────────────────────── */
+  .error-msg {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #e87a7a;
+    letter-spacing: 0.1em;
+    margin-top: 6px;
+    display: none;
+  }
+
+  .field-wrap.error .error-msg { display: block; }
+  .field-wrap.error input,
+  .field-wrap.error textarea {
+    border-color: rgba(232,122,122,0.5);
+    border-bottom-color: #e87a7a;
+  }
+</style>
+</head>
+<body>
+
+<div class="stars"></div>
+
+<!-- ══ INTRO ══════════════════════════════════════════════════════════════ -->
+<div class="wrapper">
+  <section id="intro">
+    <div class="sigil">∞</div>
+    <h1 class="game-title">INFINITY</h1>
+    <p class="subtitle">Season Zero  //  Player Profile  //  Medellín</p>
+
+    <div class="divider"></div>
+
+    <p class="intro-body">
+      Before the game can begin, it needs to know who it's playing with.
+    </p>
+    <p class="intro-body">
+      This is not an application. It is not a test. There are no wrong answers — only honest ones and dishonest ones. The game can only calibrate your experience if you tell it the truth.
+    </p>
+    <p class="intro-body">
+      Take your time. Write from what actually happened, not from who you'd like to be.
+    </p>
+
+    <p class="intro-note">
+      // estimated time: 15–20 minutes  //  your answers are seen only by the Guide
+    </p>
+
+    <button class="begin-btn" onclick="beginForm()">
+      <span>Enter the Portal</span>
+    </button>
+  </section>
+</div>
+
+<!-- ══ PROGRESS BAR ════════════════════════════════════════════════════════ -->
+<div class="progress-wrap" id="progress-bar" style="display:none;">
+  <div class="progress-inner">
+    <span class="progress-label">CALIBRATING</span>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <span class="progress-count" id="progress-count">0 / 8</span>
+  </div>
+</div>
+
+<!-- ══ FORM ════════════════════════════════════════════════════════════════ -->
+<div class="wrapper">
+  <section id="form-section">
+    <form id="intake-form" novalidate>
+
+      <!-- PART 1: WHO YOU ARE -->
+      <div class="section-header" data-reveal>
+        <p class="section-tag">Part One</p>
+        <h2 class="section-title">Who Are You</h2>
+        <p class="section-body">The basics. The game needs a name to call you.</p>
+      </div>
+
+      <div class="q-block" data-reveal>
+        <div class="q-number">01 // Identity</div>
+        <div class="q-text">What do we call you?</div>
+        <div class="q-name-row">
+          <div class="field-wrap" id="wrap-name">
+            <label class="field-label" for="player-name">Name or handle</label>
+            <input type="text" id="player-name" name="name" placeholder="The name you actually use" autocomplete="off">
+            <span class="error-msg">The game needs something to call you.</span>
+          </div>
+          <div class="field-wrap">
+            <label class="field-label" for="player-city">Where you're based</label>
+            <input type="text" id="player-city" name="city" placeholder="City, neighbourhood" autocomplete="off">
+          </div>
+        </div>
+      </div>
+
+      <div class="q-block" data-reveal>
+        <div class="q-number">02 // Contact</div>
+        <div class="q-text">How should the game reach you?</div>
+        <div class="q-name-row">
+          <div class="field-wrap" id="wrap-whatsapp">
+            <label class="field-label" for="player-wa">WhatsApp number</label>
+            <input type="text" id="player-wa" name="whatsapp" placeholder="+57  ···" autocomplete="off">
+            <span class="error-msg">Quests are delivered here — we need this.</span>
+          </div>
+          <div class="field-wrap">
+            <label class="field-label" for="player-email">Email (optional)</label>
+            <input type="email" id="player-email" name="email" placeholder="For longer transmissions" autocomplete="off">
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 2: YOUR STORY -->
+      <div class="section-header" data-reveal>
+        <p class="section-tag">Part Two</p>
+        <h2 class="section-title">Your Story</h2>
+        <p class="section-body">Six questions. Each one asks you to describe something real — a specific situation, not a general belief. The more specific, the better the game can calibrate.</p>
+      </div>
+
+      <!-- Q3 — Projection Index -->
+      <div class="q-block" data-reveal>
+        <div class="q-number">03 // The Event</div>
+        <div class="q-text">Tell me about a time something went wrong — in a project, a relationship, or a plan.</div>
+        <div class="q-hint">What happened? Who was involved? Be specific — one real situation, not a general pattern.</div>
+        <div class="field-wrap" id="wrap-q3">
+          <textarea id="q3" name="q3" placeholder="Write what actually happened, as you experienced it…" oninput="countChars(this,'cnt3')"></textarea>
+          <span class="char-count" id="cnt3">0 words</span>
+          <span class="error-msg">This question is required. Take your time.</span>
+        </div>
+      </div>
+
+      <!-- Q4 — Reactivity Latency -->
+      <div class="q-block" data-reveal>
+        <div class="q-number">04 // The Reaction</div>
+        <div class="q-text">Describe a moment in the last month where you felt a strong emotional reaction. What was the feeling, and what did you do with it?</div>
+        <div class="q-hint">The sequence matters: what happened first — the reaction or the response?</div>
+        <div class="field-wrap" id="wrap-q4">
+          <textarea id="q4" name="q4" placeholder="A specific moment — not 'I usually…' but 'This one time…'" oninput="countChars(this,'cnt4')"></textarea>
+          <span class="char-count" id="cnt4">0 words</span>
+          <span class="error-msg">This question is required.</span>
+        </div>
+      </div>
+
+      <!-- Q5 — Agency Ownership -->
+      <div class="q-block" data-reveal>
+        <div class="q-number">05 // The Stuck Place</div>
+        <div class="q-text">What's one thing in your life right now that feels stuck or unresolved? What's keeping it stuck?</div>
+        <div class="q-hint">Don't explain what you plan to do about it. Just describe what it is and what's in the way.</div>
+        <div class="field-wrap" id="wrap-q5">
+          <textarea id="q5" name="q5" placeholder="Be honest. The game works better when you are." oninput="countChars(this,'cnt5')"></textarea>
+          <span class="char-count" id="cnt5">0 words</span>
+          <span class="error-msg">This question is required.</span>
+        </div>
+      </div>
+
+      <!-- Q6 — Truth Tolerance -->
+      <div class="q-block" data-reveal>
+        <div class="q-number">06 // The Hard Truth</div>
+        <div class="q-text">What's the most useful piece of hard feedback you've ever received — and how did you receive it at the time?</div>
+        <div class="q-hint">Not how you see it now in retrospect. How did it land when it first arrived?</div>
+        <div class="field-wrap" id="wrap-q6">
+          <textarea id="q6" name="q6" placeholder="What was said, who said it, and what happened inside you when you heard it…" oninput="countChars(this,'cnt6')"></textarea>
+          <span class="char-count" id="cnt6">0 words</span>
+          <span class="error-msg">This question is required.</span>
+        </div>
+      </div>
+
+      <!-- Q7 — Service Purity -->
+      <div class="q-block" data-reveal>
+        <div class="q-number">07 // The Energy</div>
+        <div class="q-text">When do you feel most alive — when you're accomplishing something for yourself, or when you're doing something for someone else? Describe a specific time you felt genuinely energised.</div>
+        <div class="q-hint">Both are valid. The game isn't looking for a particular answer — just an honest one.</div>
+        <div class="field-wrap" id="wrap-q7">
+          <textarea id="q7" name="q7" placeholder="A real moment. What were you doing, and what did it feel like in your body?" oninput="countChars(this,'cnt7')"></textarea>
+          <span class="char-count" id="cnt7">0 words</span>
+          <span class="error-msg">This question is required.</span>
+        </div>
+      </div>
+
+      <!-- Q8 — Presence Depth -->
+      <div class="q-block" data-reveal>
+        <div class="q-number">08 // The Morning</div>
+        <div class="q-text">What does your mind feel like when you wake up in the morning? Walk me through the first five minutes.</div>
+        <div class="q-hint">Not what you do — what your mind is doing. Where does it go first?</div>
+        <div class="field-wrap" id="wrap-q8">
+          <textarea id="q8" name="q8" placeholder="Take your time with this one. It's asking something subtle." oninput="countChars(this,'cnt8')"></textarea>
+          <span class="char-count" id="cnt8">0 words</span>
+          <span class="error-msg">This question is required.</span>
+        </div>
+      </div>
+
+      <!-- SUBMIT -->
+      <div class="submit-area" data-reveal>
+        <p class="submit-note">
+          When you're ready — and only when you're ready — send this through. 
+          Your answers will be read by the Guide before your first quest arrives.
+          There is no rush. There is only honesty.
+        </p>
+        <button type="submit" class="submit-btn">
+          <span>Transmit Your Profile</span>
+        </button>
+      </div>
+
+    </form>
+  </section>
+
+  <!-- ══ THANK YOU ══════════════════════════════════════════════════════════ -->
+  <section id="thankyou">
+    <div class="ty-sigil">∞</div>
+    <h2 class="ty-title">Profile Received.</h2>
+    <p class="ty-body">
+      Your answers have been transmitted to the Guide.
+    </p>
+    <p class="ty-body">
+      Watch for a message from an unknown number within 48 hours.
+      That will be the beginning.
+    </p>
+    <p class="ty-body" style="color: var(--gray); font-size:16px; font-style:italic;">
+      Do not tell anyone what this is yet. Let it arrive first.
+    </p>
+    <p class="ty-code">// SEASON ZERO  //  MEDELLÍN  //  YOUR COORDINATES LOGGED</p>
+  </section>
+</div>
+
+<script>
+  // ── Progress tracking ─────────────────────────────────────────────────────
+  const TOTAL_FIELDS = 8;
+
+  function updateProgress() {
+    const fields = [
+      document.getElementById('player-name'),
+      document.getElementById('player-wa'),
+      document.getElementById('q3'),
+      document.getElementById('q4'),
+      document.getElementById('q5'),
+      document.getElementById('q6'),
+      document.getElementById('q7'),
+      document.getElementById('q8'),
+    ];
+    const filled = fields.filter(f => f && f.value.trim().length > 0).length;
+    const pct = (filled / TOTAL_FIELDS) * 100;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-count').textContent = filled + ' / ' + TOTAL_FIELDS;
+  }
+
+  // ── Word counter ──────────────────────────────────────────────────────────
+  function countChars(el, countId) {
+    const words = el.value.trim().split(/\s+/).filter(w => w.length > 0).length;
+    const el2 = document.getElementById(countId);
+    el2.textContent = words + (words === 1 ? ' word' : ' words');
+    el2.classList.toggle('active', words > 0);
+    updateProgress();
+  }
+
+  // ── Scroll reveal ──────────────────────────────────────────────────────────
+  function setupReveal() {
+    const items = document.querySelectorAll('[data-reveal]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+    items.forEach(item => observer.observe(item));
+  }
+
+  // ── Begin form ────────────────────────────────────────────────────────────
+  function beginForm() {
+    document.getElementById('intro').style.display = 'none';
+    document.getElementById('progress-bar').style.display = 'block';
+    const fs = document.getElementById('form-section');
+    fs.style.display = 'block';
+    setTimeout(() => {
+      fs.classList.add('visible');
+      setupReveal();
+      // Attach input listeners
+      ['player-name','player-wa','player-email','player-city'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateProgress);
+      });
+    }, 50);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Validate ──────────────────────────────────────────────────────────────
+  function validate() {
+    const required = [
+      { id: 'player-name',  wrap: 'wrap-name' },
+      { id: 'player-wa',    wrap: 'wrap-whatsapp' },
+      { id: 'q3',           wrap: 'wrap-q3' },
+      { id: 'q4',           wrap: 'wrap-q4' },
+      { id: 'q5',           wrap: 'wrap-q5' },
+      { id: 'q6',           wrap: 'wrap-q6' },
+      { id: 'q7',           wrap: 'wrap-q7' },
+      { id: 'q8',           wrap: 'wrap-q8' },
+    ];
+    let valid = true;
+    required.forEach(({ id, wrap }) => {
+      const el = document.getElementById(id);
+      const w  = document.getElementById(wrap);
+      if (!el || !w) return;
+      const empty = el.value.trim().length === 0;
+      w.classList.toggle('error', empty);
+      if (empty) {
+        valid = false;
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+    return valid;
+  }
+
+  // ── Submit ─────────────────────────────────────────────────────────────────
+  // ⚙️  SETUP: Replace YOUR_FORMSPREE_ID below with your actual Formspree endpoint ID.
+  //    Steps: 1) Go to formspree.io  2) Sign up free  3) Click "New Form"
+  //    4) Copy the ID from the endpoint URL (e.g. "xpwzgkno")  5) Paste it below
+  const FORMSPREE_ID = 'mvzbdpnn';
+  const FORMSPREE_URL = 'https://formspree.io/f/' + FORMSPREE_ID;
+
+  document.getElementById('intake-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!validate()) return;
+
+    const btn = document.querySelector('.submit-btn');
+    const origText = btn.querySelector('span').textContent;
+
+    // Loading state
+    btn.disabled = true;
+    btn.querySelector('span').textContent = 'Transmitting…';
+    btn.style.opacity = '0.7';
+
+    const data = {
+      _subject:          `∞ Player Profile — ${document.getElementById('player-name').value}`,
+      name:              document.getElementById('player-name').value,
+      city:              document.getElementById('player-city').value,
+      whatsapp:          document.getElementById('player-wa').value,
+      email:             document.getElementById('player-email').value,
+      '03_the_event':           document.getElementById('q3').value,
+      '04_the_reaction':        document.getElementById('q4').value,
+      '05_the_stuck_place':     document.getElementById('q5').value,
+      '06_the_hard_truth':      document.getElementById('q6').value,
+      '07_the_energy':          document.getElementById('q7').value,
+      '08_the_morning':         document.getElementById('q8').value,
+    };
+
+    try {
+      const res = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (res.ok) {
+        // Success — show thank you
+        document.getElementById('form-section').style.display = 'none';
+        document.getElementById('progress-bar').style.display = 'none';
+        const ty = document.getElementById('thankyou');
+        ty.classList.add('visible');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        // Server error
+        const json = await res.json();
+        throw new Error(json.error || 'Transmission failed');
+      }
+    } catch (err) {
+      // Error state — show message, re-enable button
+      btn.disabled = false;
+      btn.querySelector('span').textContent = origText;
+      btn.style.opacity = '1';
+      showTransmitError(err.message);
+    }
+  });
+
+  function showTransmitError(msg) {
+    let errEl = document.getElementById('transmit-error');
+    if (!errEl) {
+      errEl = document.createElement('p');
+      errEl.id = 'transmit-error';
+      errEl.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:11px;color:#e87a7a;letter-spacing:0.1em;margin-top:16px;';
+      document.querySelector('.submit-area').appendChild(errEl);
+    }
+    errEl.textContent = '⚠ Transmission error: ' + msg + '  —  Check your connection and try again.';
+  }
+</script>
+</body>
+</html>
